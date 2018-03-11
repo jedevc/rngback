@@ -1,11 +1,34 @@
-from PIL import Image, ImageDraw, ImageColor
+import argparse
 
+from PIL import Image, ImageDraw, ImageColor
 import random
 
 from . import util
 
 def main(*args):
-    generate(*args)
+    parser = argparse.ArgumentParser(prog='rngback',
+              description='Randomly generate visually pleasing geometric backgrounds.')
+    parser.add_argument('width', type=int, help='image width')
+    parser.add_argument('height', type=int, help='image width')
+    parser.add_argument('columns', type=int, help='number of columns')
+    parser.add_argument('rows', type=int, help='number of rows')
+
+    parser.add_argument('-off', '--offset', default=0, type=int,
+              help='individual shape offset')
+
+    parser.add_argument('-bg', '--background', default='white',
+              help='background color')
+    parser.add_argument('-fg', '--foreground', default='black',
+              help='foreground color')
+    parser.add_argument('-var', '--variation', default=0, type=int,
+              help='foreground color variation amount')
+
+    parser.add_argument('-o', '--output', default='', help='output file')
+
+    args = parser.parse_args()
+
+    generate(args.width, args.height, args.columns, args.rows, args.offset,
+              args.background, args.foreground, args.variation, args.output)
 
 def generate(width, height, columns, rows,
              offset, background, foreground, variation,
