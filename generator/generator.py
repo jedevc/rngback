@@ -8,7 +8,8 @@ def main(*args):
     generate(*args)
 
 def generate(width, height, columns, rows,
-             offset, background, foreground, variation):
+             offset, background, foreground, variation,
+             output = None):
 
     cwidth, rheight = width / columns, height / rows
 
@@ -27,7 +28,10 @@ def generate(width, height, columns, rows,
             color = make_color(foreground, variation)
             drw.polygon(poly, fill=color)
 
-    img.show()
+    if output:
+        img.save(output)
+    else:
+        img.show()
 
 def make_shape(*args):
     choice = random.randint(0, 4)

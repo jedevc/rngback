@@ -20,7 +20,9 @@ if __name__ == "__main__":
     parser.add_argument('-var', '--variation', default=0, type=int,
               help='foreground color variation amount')
 
+    parser.add_argument('-o', '--output', default='', help='output file')
+
     args = parser.parse_args()
 
     main(args.width, args.height, args.columns, args.rows, args.offset,
-              args.background, args.foreground, args.variation)
+              args.background, args.foreground, args.variation, args.output)
