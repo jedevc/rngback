@@ -1,0 +1,9 @@
+# byte-compiled files
+__pycache__
+
+# environments
+venv/
+
+# vim stuff
+*.un~
+*.swp
