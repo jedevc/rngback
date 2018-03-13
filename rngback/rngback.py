@@ -1,9 +1,10 @@
 import argparse
 
-from PIL import Image, ImageDraw, ImageColor
+from PIL import Image, ImageDraw
 import random
 
 from . import util
+from .color import parse_color
 
 def main(*args):
     parser = argparse.ArgumentParser(prog='rngback',
@@ -36,8 +37,8 @@ def generate(width, height, columns, rows,
 
     cwidth, rheight = width / columns, height / rows
 
-    foreground = ImageColor.getrgb(foreground)
-    background = ImageColor.getrgb(background)
+    foreground = parse_color(foreground)
+    background = parse_color(background)
 
     img = Image.new('RGB', (width, height), background)
 
