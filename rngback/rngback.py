@@ -6,7 +6,11 @@ import random
 from . import util
 from .color import parse_color
 
-def main(*args):
+def main():
+    '''
+    Simple wrapper for the generate() function that parses command line arguments.
+    '''
+
     parser = argparse.ArgumentParser(prog='rngback',
               description='Randomly generate visually pleasing geometric backgrounds.')
     parser.add_argument('width', type=int, help='image width')
@@ -34,6 +38,21 @@ def main(*args):
 def generate(width, height, columns, rows,
              offset, background, foreground, variation,
              output = None):
+    '''
+    Generates a random background image.
+
+    Args:
+        width: The image width.
+        height: The image height.
+        columns: The number of shapes to fit along the x-axis.
+        rows: The number of shapes to fit along the y-axis.
+        offset: The internal offset of each shape.
+        background: The color of the image's background.
+        foreground: The color of the shapes in the image.
+        variation: The amount to vary the color of the shapes.
+        output: The output file. Default is to display the image on-screen.
+    '''
+
 
     cwidth, rheight = width / columns, height / rows
 
@@ -58,25 +77,67 @@ def generate(width, height, columns, rows,
         img.show()
 
 def make_shape(*args):
+    '''
+    Generate the vertices of a randomly chosen shape (rectangle or triangle).
+
+    Args: (see make_rect)
+
+    Returns:
+        A list of the vertices of the shape.
+    '''
+
     choice = random.randint(0, 4)
     if choice == 0:
-        return make_square(*args)
+        return make_rect(*args)
     else:
         return make_triangle(*args)
 
-def make_square(x, y, width, height):
+def make_rect(x, y, width, height):
+    '''
+    Generate the vertices of a rectangle.
+
+    Args:
+        x: The x-coordinate of the top-left corner of the rectangle.
+        y: The y-coordinate of the top-left corner of the rectangle.
+        width: The width of the rectangle.
+        height: The height of the rectangle.
+
+    Returns:
+        A list of the vertices of the rectangle.
+    '''
+
     points = [(x, y),
               (x + width, y),
               (x + width, y + height),
               (x, y + height)]
     return points
 
-def make_triangle(x, y, width, height):
-    points = make_square(x, y, width, height)
+def make_triangle(*args):
+    '''
+    Generate the the vertices a randomly-oriented triangle.
+
+    Args: (see make_rect)
+
+    Returns:
+        A list of the vertices of the triangle.
+    '''
+
+    points = make_rect(*args)
     points.remove(random.choice(points))
     return points
 
 def make_color(rgb, variation):
+    '''
+    Using a base color, generate another random color with the provided variation.
+
+    Args:
+        rgb: The base color as an RGB tuple.
+        variation: The maximum amount to vary the color by.
+
+    Returns:
+        The altered color as an RGB tuple.
+    '''
+
     red, green, blue = rgb
     lower, upper = -variation / 2, variation / 2
 
