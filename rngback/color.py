@@ -10,37 +10,71 @@ def parse_color(color):
     also generates random colors.
 
     Args:
-        color: A string taking one of the following values.
-            - ImageColor.getrgb color string
-            - "rand" / "random"
+        color: An ImageColor string. The string is passed to randomizer()
+            before being parsed.
 
     Returns:
         An RGB color tuple.
     '''
 
     if type(color) == str:
-        if color in ['rand', 'random']:
-            choice = random_color(range(30, 90), range(40, 70))
-            return ImageColor.getrgb(choice)
-        else:
-            return ImageColor.getrgb(color)
+        color = randomizer(color)
+        return ImageColor.getrgb(color)
     else:
        return color
 
-def random_color(satrange, lirange):
+def randomizer(string):
     '''
-    Generate a random color.
+    Generate a random color using a template string.
+
+    The templates are contained within '{}' parentheses and should contain two
+    values seperated by a '-' dash. For example, '{0-10}' will be replaced with
+    a number between 0 and 10.
+
+    The generated result will be left padded with '0's to match the width of
+    the first value. This can be very useful in ensuring creation of valid html
+    color codes.
+
+    If the template starts with a '#' hash, then the numbers inside will be
+    interpreted as hexadecimal, and the output will be likewise formatted.
 
     Args:
-        satrange: A range of values to generate the saturation value from.
-        lirange: A range of values to generate the light value from.
+        string: The color template.
 
     Returns:
-        A randomly generated color as an HSL string.
+        A randomly generated color string. Note that this string is not
+        guaranteed to be valid.
     '''
 
-    hue = random.randint(0, 360)
-    sat = random.randint(satrange.start, satrange.stop)
-    li = random.randint(lirange.start, lirange.stop)
+    paren = string.find('{')
+    while paren != -1:
+        # find the matching parenthesis
+        endparen = string.find('}', paren + 1)
+        if endparen == -1:
+            raise ValueError('expected closing parenthesis')
 
-    return f'hsl({hue}, {sat}%, {li}%)'
+        # find the range endpoints
+        numbers = string[paren + 1:endparen].split('-')
+        if len(numbers) != 2:
+            raise ValueError('expected two endpoints')
+        start, end = numbers[0], numbers[1]
+
+        if start.startswith('#'):
+            # hexidecimal
+            pad = len(start) - 1
+            start, end = int(start[1:], 16), int(end, 16)
+            value = random.randint(start, end)
+            value = hex(value)[2:].zfill(pad)
+        else:
+            # regular decimal
+            pad = len(start)
+            start, end = int(start), int(end)
+            value = random.randint(start, end)
+            value = str(value).zfill(pad)
+
+        # replace template with generated value
+        string = string[:paren] + value + string[endparen + 1:]
+
+        paren = string.find('{')
+
+    return string
