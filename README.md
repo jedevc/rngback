@@ -1,3 +1,5 @@
+![example.png](https://raw.githubusercontent.com/jedevc/rngback/master/example.png)
+
 # rngback
 
 rngback is a simple, easy-to-use tool to randomly generate visually pleasing
