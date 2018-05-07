@@ -8,7 +8,8 @@ from .color import parse_color
 
 def main():
     '''
-    Simple wrapper for the generate() function that parses command line arguments.
+    Simple wrapper for the generate() function that parses command line
+    arguments.
     '''
 
     parser = argparse.ArgumentParser(prog='rngback',
@@ -128,7 +129,8 @@ def make_triangle(*args):
 
 def make_color(rgb, variation):
     '''
-    Using a base color, generate another random color with the provided variation.
+    Using a base color, generate another random color with the provided
+    variation.
 
     Args:
         rgb: The base color as an RGB tuple.
