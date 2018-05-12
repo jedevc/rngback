@@ -13,7 +13,7 @@ To setup rngback, clone the repo and then run `setup.py`.
 	$ cd rngback
 	$ python setup.py install
 
-You should then be able to access then `rngback` command. If not, then make
+You should then be able to access the `rngback` command. If not, then make
 sure that the pip installation directory is added to your `PATH`.
 
 ## Usage
