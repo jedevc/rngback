@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='rngback',
-    version='0.1',
+    version='1.0',
     description='Create randomly generated geometric backgrounds',
     url='https://github.com/jedevc/rngback',
     author='Justin Chadwell',
