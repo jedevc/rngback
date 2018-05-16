@@ -18,30 +18,30 @@ sure that the pip installation directory is added to your `PATH`.
 
 ## Example usage
 
-Generate a 400x600 image, with 20x30 squares.
+Generate a 600x400 image, with 30x20 squares.
 
-	$ rngback 400 600 10 15
+	$ rngback 600 400 15 10
 
 Generate the same thing but with an blue foreground and a darkblue background.
 
-	$ rngback 400 600 10 15 -fg blue -bg darkblue
+	$ rngback 600 400 15 10 -fg blue -bg darkblue
 
 Add some variation to the foreground.
 
-	$ rngback 400 600 10 15 -fg blue -bg darkblue -var 40
+	$ rngback 600 400 15 10 -fg blue -bg darkblue -var 40
 
 Randomize the foreground to a different shade of blue each time and a black
 background.
 
-	$ rngback 400 600 10 15 -fg 'hsl({160-240}, {50-70}%, 60%)' -bg darkblue -var 40
+	$ rngback 600 400 15 10 -fg 'hsl({160-240}, {50-70}%, 60%)' -bg darkblue -var 40
 
 Create gaps between the squares.
 
-	$ rngback 400 600 10 15 -fg blue -bg darkblue -off 2
+	$ rngback 600 400 15 10 -fg blue -bg darkblue -off 2
 
 Use multiple foreground colors.
 
-	$ rngback 400 600 10 15 -fg blue -fg mediumblue -bg darkblue
+	$ rngback 600 400 15 10 -fg blue -fg mediumblue -bg darkblue
 
 ## More
 
