@@ -8,8 +8,7 @@ from .color import parse_color
 
 def main():
     '''
-    Simple wrapper for the generate() function that parses command line
-    arguments.
+    Simple wrapper for the generator that parses command line arguments.
     '''
 
     parser = argparse.ArgumentParser(prog='rngback',
@@ -35,14 +34,13 @@ def main():
     if args.foreground is None:
         args.foreground = ['black']
 
-    generate(args.width, args.height, args.columns, args.rows, args.offset,
-              args.background, args.foreground, args.variation, args.output)
+    gen = Generator(args.width, args.height, args.columns, args.rows,
+            args.offset, args.background, args.foreground, args.variation)
+    gen.generate(args.output)
 
-def generate(width, height, columns, rows,
-             offset, background, foreground, variation,
-             output = None):
+class Generator:
     '''
-    Generates a random background image.
+    Generator for a random background image.
 
     Args:
         width: The image width.
@@ -53,105 +51,126 @@ def generate(width, height, columns, rows,
         background: The colors of the image's background.
         foreground: The color of the shapes in the image.
         variation: The amount to vary the color of the shapes.
-        output: The output file. Default is to display the image on-screen.
     '''
 
+    def __init__(self, width, height, columns, rows,
+            offset, background, foreground, variation):
+        self.width = width
+        self.height = height
+        self.columns = columns
+        self.rows = rows
+        self.cwidth = width / columns
+        self.rheight = height / rows
 
-    cwidth, rheight = width / columns, height / rows
+        self.offset = offset
 
-    background = parse_color(background)
-    foreground = [parse_color(fg) for fg in foreground]
+        self.background = parse_color(background)
+        self.foreground = [parse_color(fg) for fg in foreground]
 
-    img = Image.new('RGB', (width, height), background)
+        self.variation = variation
 
-    drw = ImageDraw.Draw(img, 'RGBA')
-    for i in range(columns):
-        for j in range(rows):
-            poly = make_shape(i * cwidth + offset,
-                              j * rheight + offset,
-                              cwidth - offset * 2,
-                              rheight - offset * 2)
-            color = make_color(random.choice(foreground), variation)
-            drw.polygon(poly, fill=color)
+    def generate(self, output = None):
+        '''
+        Generate an image.
 
-    if output:
-        img.save(output)
-    else:
-        img.show()
+        Args:
+            output: The location to output the image to.
 
-def make_shape(*args):
-    '''
-    Generate the vertices of a randomly chosen shape (rectangle or triangle).
+        Returns:
+            The image.
+        '''
 
-    Args: (see make_rect)
+        img = Image.new('RGB', (self.width, self.height), self.background)
 
-    Returns:
-        A list of the vertices of the shape.
-    '''
+        drw = ImageDraw.Draw(img, 'RGBA')
+        for i in range(self.columns):
+            for j in range(self.rows):
+                poly = self.make_shape(i, j)
+                color = self.make_color()
+                drw.polygon(poly, fill=color)
 
-    choice = random.randint(0, 4)
-    if choice == 0:
-        return make_rect(*args)
-    else:
-        return make_triangle(*args)
+        if output:
+            img.save(output)
+        else:
+            img.show()
 
-def make_rect(x, y, width, height):
-    '''
-    Generate the vertices of a rectangle.
+        return img
 
-    Args:
-        x: The x-coordinate of the top-left corner of the rectangle.
-        y: The y-coordinate of the top-left corner of the rectangle.
-        width: The width of the rectangle.
-        height: The height of the rectangle.
+    def make_shape(self, *args):
+        '''
+        Generate the vertices of a randomly chosen shape (rectangle or triangle).
 
-    Returns:
-        A list of the vertices of the rectangle.
-    '''
+        Args: (see make_square)
 
-    points = [(x, y),
-              (x + width, y),
-              (x + width, y + height),
-              (x, y + height)]
-    return points
+        Returns:
+            A list of the vertices of the shape.
+        '''
 
-def make_triangle(*args):
-    '''
-    Generate the the vertices a randomly-oriented triangle.
+        choice = random.randint(0, 4)
+        if choice == 0:
+            return self.make_square(*args)
+        else:
+            return self.make_triangle(*args)
 
-    Args: (see make_rect)
+    def make_square(self, x, y):
+        '''
+        Generate the vertices of a square.
 
-    Returns:
-        A list of the vertices of the triangle.
-    '''
+        Args:
+            x: The localized x-coordinate of the square to generate.
+            y: The localized y-coordinate of the square to generate.
 
-    points = make_rect(*args)
-    points.remove(random.choice(points))
-    return points
+        Returns:
+            A list of the vertices of the square.
+        '''
 
-def make_color(rgb, variation):
-    '''
-    Using a base color, generate another random color with the provided
-    variation.
+        x1 = x * self.cwidth + self.offset
+        y1 = y * self.rheight + self.offset
+        x2 = (x + 1) * self.cwidth - self.offset
+        y2 = (y + 1) * self.rheight - self.offset
 
-    Args:
-        rgb: The base color as an RGB tuple.
-        variation: The maximum amount to vary the color by.
+        return [(x1, y1),
+                (x2, y1),
+                (x2, y2),
+                (x1, y2)]
 
-    Returns:
-        The altered color as an RGB tuple.
-    '''
+    def make_triangle(self, *args):
+        '''
+        Generate the the vertices a randomly-oriented triangle.
 
-    red, green, blue = rgb
-    lower, upper = -variation / 2, variation / 2
+        Args: (see make_square)
 
-    red += random.randint(lower, upper)
-    red = util.clamp(red, 0, 255)
+        Returns:
+            A list of the vertices of the triangle.
+        '''
 
-    blue += random.randint(lower, upper)
-    blue = util.clamp(blue, 0, 255)
+        points = self.make_square(*args)
+        points.remove(random.choice(points))
+        return points
 
-    green += random.randint(lower, upper)
-    green = util.clamp(green, 0, 255)
+    def make_color(self):
+        '''
+        Using a base color, generate another random color with the provided
+        variation.
 
-    return (red, green, blue)
+        Args:
+            rgb: The base color as an RGB tuple.
+            variation: The maximum amount to vary the color by.
+
+        Returns:
+            The altered color as an RGB tuple.
+        '''
+
+        red, green, blue = random.choice(self.foreground)
+        lower, upper = -self.variation / 2, self.variation / 2
+
+        red += random.randint(lower, upper)
+        red = util.clamp(red, 0, 255)
+
+        blue += random.randint(lower, upper)
+        blue = util.clamp(blue, 0, 255)
+
+        green += random.randint(lower, upper)
+        green = util.clamp(green, 0, 255)
+
+        return (red, green, blue)
