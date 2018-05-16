@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw
 import random
 
 from . import util
-from .color import parse_color
+from . import color
 
 def main():
     '''
@@ -32,7 +32,7 @@ def main():
 
     args = parser.parse_args()
     if args.foreground is None:
-        args.foreground = ['black']
+        args.foreground = 'black'
 
     gen = Generator(args.width, args.height, args.columns, args.rows,
             args.offset, args.background, args.foreground, args.variation)
@@ -64,8 +64,8 @@ class Generator:
 
         self.offset = offset
 
-        self.background = parse_color(background)
-        self.foreground = [parse_color(fg) for fg in foreground]
+        self.background = color.parse_color(background)
+        self.foreground = color.parse_colors(foreground)
 
         self.variation = variation
 

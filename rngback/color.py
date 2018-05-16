@@ -23,6 +23,22 @@ def parse_color(color):
     else:
        return color
 
+def parse_colors(colors):
+    '''
+    Parse multiple color strings.
+
+    Args:
+        colors: An iterable of colors to parse.
+
+    Returns:
+        RGB color tuples for every item in colors.
+    '''
+
+    if type(colors) == str:
+        return [parse_color(colors)]
+    else:
+        return [parse_color(color) for color in colors]
+
 def randomizer(string):
     '''
     Generate a random color using a template string.
