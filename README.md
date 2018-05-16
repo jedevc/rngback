@@ -49,3 +49,8 @@ Use multiple foreground colors.
 rngback comes with a builtin help. To view it, simply run:
 
 	$ rngback --help
+
+## License
+
+rngback uses the UNLICENSE and as such is completely free to use.
+Do whatever you feel like doing with it. Go. Be free :)
