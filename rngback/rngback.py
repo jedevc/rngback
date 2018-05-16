@@ -69,7 +69,7 @@ class Generator:
 
         self.variation = variation
 
-    def generate(self, output = None):
+    def generate(self, output=None):
         '''
         Generate an image.
 
@@ -152,10 +152,6 @@ class Generator:
         '''
         Using a base color, generate another random color with the provided
         variation.
-
-        Args:
-            rgb: The base color as an RGB tuple.
-            variation: The maximum amount to vary the color by.
 
         Returns:
             The altered color as an RGB tuple.
