@@ -39,6 +39,10 @@ Create gaps between the squares.
 
 	$ rngback 400 600 10 15 -fg blue -bg darkblue -off 2
 
+Use multiple foreground colors.
+
+	$ rngback 400 600 10 15 -fg blue -fg mediumblue -bg darkblue
+
 ## More
 
 rngback comes with a builtin help. To view it, simply run:

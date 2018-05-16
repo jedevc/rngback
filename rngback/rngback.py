@@ -24,7 +24,7 @@ def main():
 
     parser.add_argument('-bg', '--background', default='white',
               help='background color')
-    parser.add_argument('-fg', '--foreground', default='black',
+    parser.add_argument('-fg', '--foreground', action='append',
               help='foreground color')
     parser.add_argument('-var', '--variation', default=0, type=int,
               help='foreground color variation amount')
@@ -32,6 +32,8 @@ def main():
     parser.add_argument('-o', '--output', default='', help='output file')
 
     args = parser.parse_args()
+    if args.foreground is None:
+        args.foreground = ['black']
 
     generate(args.width, args.height, args.columns, args.rows, args.offset,
               args.background, args.foreground, args.variation, args.output)
@@ -48,7 +50,7 @@ def generate(width, height, columns, rows,
         columns: The number of shapes to fit along the x-axis.
         rows: The number of shapes to fit along the y-axis.
         offset: The internal offset of each shape.
-        background: The color of the image's background.
+        background: The colors of the image's background.
         foreground: The color of the shapes in the image.
         variation: The amount to vary the color of the shapes.
         output: The output file. Default is to display the image on-screen.
@@ -57,8 +59,8 @@ def generate(width, height, columns, rows,
 
     cwidth, rheight = width / columns, height / rows
 
-    foreground = parse_color(foreground)
     background = parse_color(background)
+    foreground = [parse_color(fg) for fg in foreground]
 
     img = Image.new('RGB', (width, height), background)
 
@@ -69,7 +71,7 @@ def generate(width, height, columns, rows,
                               j * rheight + offset,
                               cwidth - offset * 2,
                               rheight - offset * 2)
-            color = make_color(foreground, variation)
+            color = make_color(random.choice(foreground), variation)
             drw.polygon(poly, fill=color)
 
     if output:
