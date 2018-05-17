@@ -38,7 +38,12 @@ def main():
 
     gen = Generator(args.width, args.height, args.columns, args.rows,
             args.offset, args.background, args.foreground, args.variation)
-    gen.generate(args.seed, args.output)
+    img = gen.generate(args.seed)
+
+    if args.output:
+        img.save(args.output)
+    else:
+        img.show()
 
 class Generator:
     '''
@@ -71,13 +76,12 @@ class Generator:
 
         self.variation = variation
 
-    def generate(self, seed=None, output=None):
+    def generate(self, seed=None):
         '''
         Generate an image.
 
         Args:
             seed: The initial internal state of the random generator.
-            output: The location to output the image to.
 
         Returns:
             The image.
@@ -96,11 +100,6 @@ class Generator:
                 poly = self.make_shape(i, j)
                 color = self.make_color()
                 drw.polygon(poly, fill=color)
-
-        if output:
-            img.save(output)
-        else:
-            img.show()
 
         return img
 
