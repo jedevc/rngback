@@ -28,6 +28,8 @@ def main():
     parser.add_argument('-var', '--variation', default=0, type=int,
               help='foreground color variation amount')
 
+    parser.add_argument('-s', '--seed', help='random generation seed')
+
     parser.add_argument('-o', '--output', default='', help='output file')
 
     args = parser.parse_args()
@@ -36,7 +38,7 @@ def main():
 
     gen = Generator(args.width, args.height, args.columns, args.rows,
             args.offset, args.background, args.foreground, args.variation)
-    gen.generate(args.output)
+    gen.generate(args.seed, args.output)
 
 class Generator:
     '''
@@ -69,16 +71,22 @@ class Generator:
 
         self.variation = variation
 
-    def generate(self, output=None):
+    def generate(self, seed=None, output=None):
         '''
         Generate an image.
 
         Args:
+            seed: The initial internal state of the random generator.
             output: The location to output the image to.
 
         Returns:
             The image.
         '''
+
+        if seed:
+            random.seed(seed)
+        else:
+            random.seed()
 
         img = Image.new('RGB', (self.width, self.height), self.background)
 
