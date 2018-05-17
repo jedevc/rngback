@@ -11,7 +11,6 @@ To setup rngback, clone the repo and then run `setup.py`.
 
 	$ git clone https://github.com/jedevc/rngback.git
 	$ cd rngback
-	$ git checkout v1.0
 	$ python setup.py install
 
 You should then be able to access the `rngback` command. If not, then make
