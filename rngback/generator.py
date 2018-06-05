@@ -14,13 +14,13 @@ class Generator:
         columns: The number of shapes to fit along the x-axis.
         rows: The number of shapes to fit along the y-axis.
         offset: The internal offset of each shape.
-        background: The colors of the image's background.
-        foreground: The color of the shapes in the image.
+        background: The color of the image background.
+        foreground: The colors of the shapes in the image.
         variation: The amount to vary the color of the shapes.
     '''
 
     def __init__(self, width, height, columns, rows,
-            offset, background, foreground, variation):
+            offset=0, background='white', foreground='black', variation=0):
         self.width = width
         self.height = height
         self.columns = columns
