@@ -2,7 +2,6 @@ from PIL import Image, ImageDraw, ImageColor
 import random
 import colorsys
 
-from . import util
 from . import color
 
 class Generator:
@@ -132,14 +131,14 @@ class Generator:
 
         hue = int(hue * 360)
         hue += random.randint(-self.hvariation / 2, self.hvariation / 2)
-        hue = util.clamp(hue, 0, 360)
+        hue = max(0, min(hue, 360))
 
         sat = int(sat * 100)
         sat += random.randint(-self.svariation / 2, self.svariation / 2)
-        sat = util.clamp(sat, 0, 100)
+        sat = max(0, min(sat, 100))
 
         lit = int(lit * 100)
         lit += random.randint(-self.lvariation / 2, self.lvariation / 2)
-        lit = util.clamp(lit, 0, 100)
+        lit = max(0, min(lit, 100))
 
         return ImageColor.getrgb(f'hsl({hue}, {sat}%, {lit}%)')
