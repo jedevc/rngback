@@ -1,7 +1,8 @@
 import argparse
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageColor
 import random
+import colorsys
 
 from . import util
 from . import color
@@ -25,8 +26,13 @@ def main():
               help='background color')
     parser.add_argument('-fg', '--foreground', action='append',
               help='foreground color')
-    parser.add_argument('-var', '--variation', default=0, type=int,
-              help='foreground color variation amount')
+
+    parser.add_argument('-hvar', '--hue-variation', default=0, type=int,
+              help='foreground hue variation amount')
+    parser.add_argument('-svar', '--sat-variation', default=0, type=int,
+              help='foreground saturation variation amount')
+    parser.add_argument('-lvar', '--lit-variation', default=0, type=int,
+              help='foreground lightness variation amount')
 
     parser.add_argument('-s', '--seed', help='random generation seed')
 
@@ -36,8 +42,10 @@ def main():
     if args.foreground is None:
         args.foreground = 'black'
 
+    variation = (args.hue_variation, args.sat_variation, args.lit_variation)
+
     gen = Generator(args.width, args.height, args.columns, args.rows,
-            args.offset, args.background, args.foreground, args.variation)
+            args.offset, args.background, args.foreground, variation)
     img = gen.generate(args.seed)
 
     if args.output:
@@ -74,7 +82,10 @@ class Generator:
         self.background = color.parse_color(background)
         self.foreground = color.parse_colors(foreground)
 
-        self.variation = variation
+        try:
+            self.hvariation, self.svariation, self.lvariation = variation
+        except TypeError:
+            self.hvariation = self.svariation = self.lvariation = variation
 
     def generate(self, seed=None):
         '''
@@ -157,23 +168,26 @@ class Generator:
 
     def make_color(self):
         '''
-        Using a base color, generate another random color with the provided
-        variation.
+        Generate a random foreground color using the provided foreground colors
+        and variation amounts.
 
         Returns:
             The altered color as an RGB tuple.
         '''
 
         red, green, blue = random.choice(self.foreground)
-        lower, upper = -self.variation / 2, self.variation / 2
+        hue, lit, sat = colorsys.rgb_to_hls(red / 255, green / 255, blue / 255)
 
-        red += random.randint(lower, upper)
-        red = util.clamp(red, 0, 255)
+        hue = int(hue * 360)
+        hue += random.randint(-self.hvariation / 2, self.hvariation / 2)
+        hue = util.clamp(hue, 0, 360)
 
-        blue += random.randint(lower, upper)
-        blue = util.clamp(blue, 0, 255)
+        sat = int(sat * 100)
+        sat += random.randint(-self.svariation / 2, self.svariation / 2)
+        sat = util.clamp(sat, 0, 100)
 
-        green += random.randint(lower, upper)
-        green = util.clamp(green, 0, 255)
+        lit = int(lit * 100)
+        lit += random.randint(-self.lvariation / 2, self.lvariation / 2)
+        lit = util.clamp(lit, 0, 100)
 
-        return (red, green, blue)
+        return ImageColor.getrgb(f'hsl({hue}, {sat}%, {lit}%)')
