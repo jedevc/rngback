@@ -55,13 +55,13 @@ class Generator:
             random.seed()
 
         img = Image.new('RGB', (self.width, self.height), self.background)
-
         drw = ImageDraw.Draw(img, 'RGBA')
         for i in range(self.columns):
             for j in range(self.rows):
                 poly = self.make_shape(i, j)
-                color = self.make_color()
-                drw.polygon(poly, fill=color)
+                if poly:
+                    color = self.make_color()
+                    drw.polygon(poly, fill=color)
 
         return img
 
@@ -75,8 +75,10 @@ class Generator:
             A list of the vertices of the shape.
         '''
 
-        choice = random.randint(0, 4)
+        choice = random.randint(0, 6)
         if choice == 0:
+            return None
+        elif choice in [1, 2]:
             return self.make_square(*args)
         else:
             return self.make_triangle(*args)
