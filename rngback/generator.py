@@ -72,7 +72,7 @@ class Generator:
         Args: (see make_square)
 
         Returns:
-            A list of the vertices of the shape.
+            A list of the vertices of the shape or None for no shape.
         '''
 
         choice = random.randint(0, 6)
