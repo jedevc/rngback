@@ -30,6 +30,8 @@ def main():
             help='foreground color')
 
     variation = parser.add_argument_group('variation')
+    variation.add_argument('-var', '--variation', default=0, type=int,
+            help='foreground variation amount (deprecated)')
     variation.add_argument('-hvar', '--hue-variation', default=0, type=int,
             help='foreground hue variation amount')
     variation.add_argument('-svar', '--sat-variation', default=0, type=int,
@@ -45,6 +47,8 @@ def main():
     args = parser.parse_args()
     if args.foreground is None:
         args.foreground = 'black'
+    if args.variation and not args.hue_variation:
+        args.hue_variation = args.variation
 
     variation = (args.hue_variation, args.sat_variation, args.lit_variation)
 
