@@ -20,7 +20,7 @@ class Generator:
     '''
 
     def __init__(self, width, height, columns, rows,
-            offset=0, background='white', foreground='black', variation=0):
+            offset=0, background='white', foreground='black', blanks=True, variation=0):
         self.width = width
         self.height = height
         self.columns = columns
@@ -32,6 +32,8 @@ class Generator:
 
         self.background = color.parse_color(background)
         self.foreground = color.parse_colors(foreground)
+
+        self.blanks = blanks
 
         try:
             self.hvariation, self.svariation, self.lvariation = variation
@@ -75,7 +77,11 @@ class Generator:
             A list of the vertices of the shape or None for no shape.
         '''
 
-        choice = random.randint(0, 6)
+        if self.blanks:
+            choice = random.randint(0, 6)
+        else:
+            choice = random.randint(1, 6)
+
         if choice == 0:
             return None
         elif choice in [1, 2]:
