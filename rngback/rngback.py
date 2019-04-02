@@ -1,6 +1,7 @@
 import argparse
 
-from .generator import Generator
+from . import generator
+from .builder import Builder
 
 
 def main():
@@ -56,10 +57,13 @@ def main():
     variation = (args.hue_variation, args.sat_variation, args.lit_variation)
 
     # generate background
-    gen = Generator(args.width, args.height, args.columns, args.rows,
-                    args.offset, args.background, args.foreground,
-                    not args.noblanks, variation)
-    img = gen.generate(args.seed)
+    gen = generator.OriginalGenerator(args.width, args.height,
+                                      args.columns, args.rows,
+                                      not args.noblanks)
+    builder = Builder(gen,
+                      args.offset, args.background, args.foreground,
+                      variation)
+    img = builder.build(args.seed)
 
     # save background
     if args.output:

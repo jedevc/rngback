@@ -1,2 +1,2 @@
-from .rngback import Generator
+from .builder import Builder
 from .rngback import main

@@ -5,9 +5,9 @@ import colorsys
 from . import color
 
 
-class Generator:
+class Builder:
     '''
-    Generator for a random background image.
+    Builder for a random background image.
 
     Args:
         width: The image width.
@@ -20,31 +20,24 @@ class Generator:
         variation: The amount to vary the color of the shapes.
     '''
 
-    def __init__(self, width, height, columns, rows,
+    def __init__(self, generator,
                  offset=0, background='white', foreground='black',
-                 blanks=True, variation=0):
-        self.width = width
-        self.height = height
-        self.columns = columns
-        self.rows = rows
-        self.cwidth = width / columns
-        self.rheight = height / rows
+                 variation=0):
+        self.generator = generator
 
         self.offset = offset
 
         self.background = color.parse_color(background)
         self.foreground = color.parse_colors(foreground)
 
-        self.blanks = blanks
-
         try:
             self.hvariation, self.svariation, self.lvariation = variation
         except TypeError:
             self.hvariation = self.svariation = self.lvariation = variation
 
-    def generate(self, seed=None):
+    def build(self, seed=None):
         '''
-        Generate an image.
+        Build an image.
 
         Args:
             seed: The initial internal state of the random generator.
@@ -53,19 +46,13 @@ class Generator:
             The image.
         '''
 
-        if seed:
-            random.seed(seed)
-        else:
-            random.seed()
-
-        img = Image.new('RGB', (self.width, self.height), self.background)
+        img = Image.new('RGB',
+                        (self.generator.width, self.generator.height),
+                        self.background)
         drw = ImageDraw.Draw(img, 'RGBA')
-        for i in range(self.columns):
-            for j in range(self.rows):
-                poly = self.make_shape(i, j)
-                if poly:
-                    color = self.make_color()
-                    drw.polygon(poly, fill=color)
+        for shape in self.generator.generate(seed):
+            shape.color = self.make_color()
+            shape.render(drw)
 
         return img
 
