@@ -38,4 +38,8 @@ class OriginalGenerator:
                                    self.cwidth,
                                    self.rheight)
         else:
-            return shape.Blank()
+            return shape.RightTriangle(x * self.cwidth,
+                                       y * self.rheight,
+                                       self.cwidth,
+                                       self.rheight,
+                                       random.randint(0, 3))
