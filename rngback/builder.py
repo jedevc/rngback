@@ -21,11 +21,9 @@ class Builder:
     '''
 
     def __init__(self, generator,
-                 offset=0, background='white', foreground='black',
+                 background='white', foreground='black',
                  variation=0):
         self.generator = generator
-
-        self.offset = offset
 
         self.background = color.parse_color(background)
         self.foreground = color.parse_colors(foreground)
@@ -55,65 +53,6 @@ class Builder:
             shape.render(drw)
 
         return img
-
-    def make_shape(self, *args):
-        '''
-        Generate the vertices of a randomly chosen shape (rectangle or
-        triangle).
-
-        Args: (see make_square)
-
-        Returns:
-            A list of the vertices of the shape or None for no shape.
-        '''
-
-        if self.blanks:
-            choice = random.randint(0, 6)
-        else:
-            choice = random.randint(1, 6)
-
-        if choice == 0:
-            return None
-        elif choice in [1, 2]:
-            return self.make_square(*args)
-        else:
-            return self.make_triangle(*args)
-
-    def make_square(self, x, y):
-        '''
-        Generate the vertices of a square.
-
-        Args:
-            x: The localized x-coordinate of the square to generate.
-            y: The localized y-coordinate of the square to generate.
-
-        Returns:
-            A list of the vertices of the square.
-        '''
-
-        x1 = x * self.cwidth + self.offset
-        y1 = y * self.rheight + self.offset
-        x2 = (x + 1) * self.cwidth - self.offset
-        y2 = (y + 1) * self.rheight - self.offset
-
-        return [(x1, y1),
-                (x2, y1),
-                (x2, y2),
-                (x1, y2)]
-
-    def make_triangle(self, *args):
-        '''
-        Generate the the vertices a randomly-oriented triangle.
-
-        Args: (see make_square)
-
-        Returns:
-            A list of the vertices of the triangle.
-        '''
-
-        points = self.make_square(*args)
-        points.remove(random.choice(points))
-        return points
 
     def make_color(self):
         '''

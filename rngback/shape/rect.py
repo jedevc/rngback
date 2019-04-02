@@ -8,6 +8,14 @@ class Rectangle(Shape):
         self.width = width
         self.height = height
 
+    def scale(self, factor):
+        nwidth = self.width * factor
+        nheight = self.height * factor
+        self.x += (self.width - nwidth) / 2
+        self.y += (self.height - nheight) / 2
+        self.width = nwidth
+        self.height = nheight
+
     def render(self, draw):
         x1 = self.x
         y1 = self.y

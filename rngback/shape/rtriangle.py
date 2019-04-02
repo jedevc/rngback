@@ -1,28 +1,24 @@
-from .shape import Shape
+from .rect import Rectangle
 
 
-class RightTriangle(Shape):
+class RightTriangle(Rectangle):
     def __init__(self, x, y, width, height, orientation):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        super().__init__(x, y, width, height)
 
         self.orientation = orientation
 
+    def render(self, draw):
         x1 = self.x
         y1 = self.y
         x2 = self.x + self.width
         y2 = self.y + self.height
-        self.points = [(x1, y1),
-                       (x2, y1),
-                       (x2, y2),
-                       (x1, y2)]
+        points = [(x1, y1),
+                  (x2, y1),
+                  (x2, y2),
+                  (x1, y2)]
+        del points[self.orientation % 4]
 
-        del self.points[orientation % 4]
-
-    def render(self, draw):
         if self.color:
-            draw.polygon(self.points, fill=self.color)
+            draw.polygon(points, fill=self.color)
         else:
-            draw.polygon(self.points)
+            draw.polygon(points)

@@ -44,8 +44,8 @@ def main():
     visual = parser.add_argument_group('visual')
     visual.add_argument('--noblanks', action="store_true",
                         help='disable blank generation')
-    visual.add_argument('-off', '--offset', default=0, type=int,
-                        help='individual shape offset')
+    visual.add_argument('-sc', '--scale', default=1, type=float,
+                        help='individual shape scale')
 
     # parse arguments
     args = parser.parse_args()
@@ -59,9 +59,9 @@ def main():
     # generate background
     gen = generator.OriginalGenerator(args.width, args.height,
                                       args.columns, args.rows,
-                                      not args.noblanks)
+                                      args.scale, not args.noblanks)
     builder = Builder(gen,
-                      args.offset, args.background, args.foreground,
+                      args.background, args.foreground,
                       variation)
     img = builder.build(args.seed)
 

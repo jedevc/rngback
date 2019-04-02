@@ -4,13 +4,15 @@ from .. import shape
 
 
 class OriginalGenerator:
-    def __init__(self, width, height, columns, rows, blanks=True):
+    def __init__(self, width, height, columns, rows, scale=1, blanks=True):
         self.width = width
         self.height = height
         self.columns = columns
         self.rows = rows
         self.cwidth = width / columns
         self.rheight = height / rows
+
+        self.scale = scale
 
         self.blanks = blanks
 
@@ -22,7 +24,9 @@ class OriginalGenerator:
 
         for i in range(self.columns):
             for j in range(self.rows):
-                yield self.make_shape(i, j)
+                shape = self.make_shape(i, j)
+                shape.scale(self.scale)
+                yield shape
 
     def make_shape(self, x, y):
         if self.blanks:
