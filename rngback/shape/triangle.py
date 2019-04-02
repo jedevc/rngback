@@ -1,4 +1,5 @@
 from .rect import Rectangle
+from .polygon import Polygon
 
 
 class RightTriangle(Rectangle):
@@ -22,3 +23,17 @@ class RightTriangle(Rectangle):
             draw.polygon(points, fill=self.color)
         else:
             draw.polygon(points)
+
+
+class IsoscelesTriangle(Polygon):
+    def __init__(self, x, y, width, height, upside_down=True):
+        if upside_down:
+            points = [(x, y),
+                      (x + width, y),
+                      (x + width / 2, y + height)]
+        else:
+            points = [(x + width / 2, y),
+                      (x, y + height),
+                      (x + width, y + height)]
+
+        super().__init__(points)

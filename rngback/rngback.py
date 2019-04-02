@@ -57,7 +57,7 @@ def main():
     variation = (args.hue_variation, args.sat_variation, args.lit_variation)
 
     # generate background
-    gen = generator.OriginalGenerator(args.width, args.height,
+    gen = generator.TriangleGenerator(args.width, args.height,
                                       args.columns, args.rows,
                                       args.scale, not args.noblanks)
     builder = Builder(gen,
