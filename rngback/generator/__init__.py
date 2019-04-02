@@ -1,2 +1,1 @@
 from .original import OriginalGenerator
-

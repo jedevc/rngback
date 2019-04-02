@@ -10,19 +10,14 @@ class Builder:
     Builder for a random background image.
 
     Args:
-        width: The image width.
-        height: The image height.
-        columns: The number of shapes to fit along the x-axis.
-        rows: The number of shapes to fit along the y-axis.
-        offset: The internal offset of each shape.
+        generator: The generator to use.
         background: The color of the image background.
         foreground: The colors of the shapes in the image.
         variation: The amount to vary the color of the shapes.
     '''
 
     def __init__(self, generator,
-                 background='white', foreground='black',
-                 variation=0):
+                 background='white', foreground='black', variation=0):
         self.generator = generator
 
         self.background = color.parse_color(background)
