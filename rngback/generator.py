@@ -4,6 +4,7 @@ import colorsys
 
 from . import color
 
+
 class Generator:
     '''
     Generator for a random background image.
@@ -20,7 +21,8 @@ class Generator:
     '''
 
     def __init__(self, width, height, columns, rows,
-            offset=0, background='white', foreground='black', blanks=True, variation=0):
+                 offset=0, background='white', foreground='black',
+                 blanks=True, variation=0):
         self.width = width
         self.height = height
         self.columns = columns
@@ -69,7 +71,8 @@ class Generator:
 
     def make_shape(self, *args):
         '''
-        Generate the vertices of a randomly chosen shape (rectangle or triangle).
+        Generate the vertices of a randomly chosen shape (rectangle or
+        triangle).
 
         Args: (see make_square)
 

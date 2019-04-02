@@ -2,6 +2,7 @@ import argparse
 
 from .generator import Generator
 
+
 def main():
     '''
     Simple wrapper for the generator that parses command line arguments.
@@ -25,25 +26,25 @@ def main():
 
     colors = parser.add_argument_group('colors')
     colors.add_argument('-bg', '--background', default='white',
-            help='background color')
+                        help='background color')
     colors.add_argument('-fg', '--foreground', action='append',
-            help='foreground color')
+                        help='foreground color')
 
     variation = parser.add_argument_group('variation')
     variation.add_argument('-var', '--variation', default=0, type=int,
-            help='foreground variation amount (deprecated)')
+                           help='foreground variation amount (deprecated)')
     variation.add_argument('-hvar', '--hue-variation', default=0, type=int,
-            help='foreground hue variation amount')
+                           help='foreground hue variation amount')
     variation.add_argument('-svar', '--sat-variation', default=0, type=int,
-            help='foreground saturation variation amount')
+                           help='foreground saturation variation amount')
     variation.add_argument('-lvar', '--lit-variation', default=0, type=int,
-            help='foreground lightness variation amount')
+                           help='foreground lightness variation amount')
 
     visual = parser.add_argument_group('visual')
     visual.add_argument('--noblanks', action="store_true",
-            help='disable blank generation')
+                        help='disable blank generation')
     visual.add_argument('-off', '--offset', default=0, type=int,
-            help='individual shape offset')
+                        help='individual shape offset')
 
     # parse arguments
     args = parser.parse_args()
@@ -56,7 +57,8 @@ def main():
 
     # generate background
     gen = Generator(args.width, args.height, args.columns, args.rows,
-            args.offset, args.background, args.foreground, not args.noblanks, variation)
+                    args.offset, args.background, args.foreground,
+                    not args.noblanks, variation)
     img = gen.generate(args.seed)
 
     # save background

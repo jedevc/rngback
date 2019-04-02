@@ -2,6 +2,7 @@ from PIL import ImageColor
 
 import random
 
+
 def parse_color(color):
     '''
     Parse a color string.
@@ -21,7 +22,8 @@ def parse_color(color):
         color = randomizer(color)
         return ImageColor.getrgb(color)
     else:
-       return color
+        return color
+
 
 def parse_colors(colors):
     '''
@@ -38,6 +40,7 @@ def parse_colors(colors):
         return [parse_color(colors)]
     else:
         return [parse_color(color) for color in colors]
+
 
 def randomizer(string):
     '''

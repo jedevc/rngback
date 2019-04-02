@@ -1,4 +1,4 @@
-from .rngback import main 
+from .rngback import main
 
 if __name__ == "__main__":
     main()
