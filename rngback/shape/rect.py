@@ -8,6 +8,10 @@ class Rectangle(Shape):
         self.width = width
         self.height = height
 
+    def translate(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
     def scale(self, factor):
         nwidth = self.width * factor
         nheight = self.height * factor

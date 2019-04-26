@@ -4,17 +4,22 @@ from .. import shape
 
 
 class OriginalGenerator:
-    def __init__(self, width, height, columns, rows, scale=1, blanks=True):
-        self.width = width
-        self.height = height
+    def __init__(self, rows, columns, size, scale=1, blanks=True):
+        self.size = size
         self.columns = columns
         self.rows = rows
-        self.cwidth = width / columns
-        self.rheight = height / rows
 
         self.scale = scale
 
         self.blanks = blanks
+
+    @property
+    def width(self):
+        return self.size * self.columns
+
+    @property
+    def height(self):
+        return self.size * self.rows
 
     def generate(self, seed=None):
         if seed:
@@ -37,13 +42,13 @@ class OriginalGenerator:
         if choice == 0:
             return shape.Blank()
         elif choice in [1, 2]:
-            return shape.Rectangle(x * self.cwidth,
-                                   y * self.rheight,
-                                   self.cwidth,
-                                   self.rheight)
+            return shape.Rectangle(x * self.size,
+                                   y * self.size,
+                                   self.size,
+                                   self.size)
         else:
-            return shape.RightTriangle(x * self.cwidth,
-                                       y * self.rheight,
-                                       self.cwidth,
-                                       self.rheight,
+            return shape.RightTriangle(x * self.size,
+                                       y * self.size,
+                                       self.size,
+                                       self.size,
                                        random.randint(0, 3))

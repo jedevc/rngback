@@ -2,6 +2,9 @@ class Shape:
     def __init__(self):
         self.color = None
 
+    def translate(self, dx, dy):
+        pass
+
     def scale(self, factor):
         pass
 
