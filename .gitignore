@@ -3,6 +3,7 @@ __pycache__
 
 # environments
 venv/
+.venv
 
 # distribution and build
 build/
