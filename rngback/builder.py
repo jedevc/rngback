@@ -1,6 +1,4 @@
-from PIL import Image, ImageDraw, ImageColor
-import random
-import colorsys
+from PIL import Image, ImageDraw
 
 from . import color
 
@@ -25,13 +23,7 @@ class Builder:
         self.width = width or generator.width
         self.height = height or generator.height
 
-        self.background = color.parse_color(background)
-        self.foreground = color.parse_colors(foreground)
-
-        try:
-            self.hvariation, self.svariation, self.lvariation = variation
-        except TypeError:
-            self.hvariation = self.svariation = self.lvariation = variation
+        self.colors = color.RandomColor(foreground, background, variation)
 
     def build(self, seed=None):
         '''
@@ -46,38 +38,12 @@ class Builder:
 
         img = Image.new('RGB',
                         (self.width, self.height),
-                        self.background)
+                        self.colors.background())
         drw = ImageDraw.Draw(img, 'RGBA')
         for shape in self.generator.generate(seed):
             shape.translate((self.width - self.generator.width) / 2,
                             (self.height - self.generator.height) / 2)
-            shape.color = self.make_color()
+            shape.color = self.colors.foreground(shape)
             shape.render(drw)
 
         return img
-
-    def make_color(self):
-        '''
-        Generate a random foreground color using the provided foreground colors
-        and variation amounts.
-
-        Returns:
-            The altered color as an RGB tuple.
-        '''
-
-        red, green, blue = random.choice(self.foreground)
-        hue, lit, sat = colorsys.rgb_to_hls(red / 255, green / 255, blue / 255)
-
-        hue = int(hue * 360)
-        hue += random.randint(-self.hvariation / 2, self.hvariation / 2)
-        hue = max(0, min(hue, 360))
-
-        sat = int(sat * 100)
-        sat += random.randint(-self.svariation / 2, self.svariation / 2)
-        sat = max(0, min(sat, 100))
-
-        lit = int(lit * 100)
-        lit += random.randint(-self.lvariation / 2, self.lvariation / 2)
-        lit = max(0, min(lit, 100))
-
-        return ImageColor.getrgb(f'hsl({hue}, {sat}%, {lit}%)')
