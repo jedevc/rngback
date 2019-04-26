@@ -16,8 +16,6 @@ class Polygon(Shape):
         center = (center[0] / len(self.points),
                   center[1] / len(self.points))
 
-        print(center)
-
         npoints = []
         for point in self.points:
             xdiff = point[0] - center[0]
@@ -31,7 +29,6 @@ class Polygon(Shape):
             npoints.append(npoint)
 
         self.points = npoints
-        print(self.points)
 
     def render(self, draw):
         if self.color:

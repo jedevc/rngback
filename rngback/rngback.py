@@ -18,8 +18,7 @@ def main():
     size = parser.add_argument_group('size')
     size.add_argument('width', type=int, help='image width')
     size.add_argument('height', type=int, help='image width')
-    size.add_argument('columns', type=int, help='number of columns')
-    size.add_argument('rows', type=int, help='number of rows')
+    size.add_argument('size', type=int, help='part size')
 
     generation = parser.add_argument_group('generation')
     generation.add_argument('-s', '--seed', help='random generation seed')
@@ -57,8 +56,11 @@ def main():
     variation = (args.hue_variation, args.sat_variation, args.lit_variation)
 
     # generate background
+    # gen = generator.OriginalGenerator(args.width, args.height,
+    #                                   args.columns, args.rows,
+    #                                   args.scale, not args.noblanks)
     gen = generator.TriangleGenerator(args.width, args.height,
-                                      args.columns, args.rows,
+                                      args.size,
                                       args.scale, not args.noblanks)
     builder = Builder(gen,
                       args.background, args.foreground,

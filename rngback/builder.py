@@ -39,6 +39,9 @@ class Builder:
             The image.
         '''
 
+        print(self.background)
+        print(self.foreground)
+
         img = Image.new('RGB',
                         (self.generator.width, self.generator.height),
                         self.background)
