@@ -34,15 +34,18 @@ class TriangleGenerator:
             for i in range(-1, self.columns * 2 + 1):
                 shape = self._make_shape(i / 2, j, direction)
                 direction = not direction
-                shape.scale(self.scale)
-                yield shape
+                if shape:
+                    yield shape
 
     def _make_shape(self, x, y, direction):
         if self.blanks and random.randint(0, 5) == 0:
-            return shape.Blank()
+            return None
         else:
-            return shape.IsoscelesTriangle(x * self.shape_width,
-                                           y * self.shape_height,
-                                           self.shape_width,
-                                           self.shape_height,
-                                           direction)
+            sh = shape.IsoscelesTriangle(x * self.shape_width,
+                                         y * self.shape_height,
+                                         self.shape_width,
+                                         self.shape_height,
+                                         direction)
+
+        sh.scale(self.scale)
+        return sh

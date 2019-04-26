@@ -30,8 +30,8 @@ class OriginalGenerator:
         for i in range(self.columns):
             for j in range(self.rows):
                 shape = self.make_shape(i, j)
-                shape.scale(self.scale)
-                yield shape
+                if shape:
+                    yield shape
 
     def make_shape(self, x, y):
         if self.blanks:
@@ -40,15 +40,18 @@ class OriginalGenerator:
             choice = random.randint(1, 6)
 
         if choice == 0:
-            return shape.Blank()
+            return None
         elif choice in [1, 2]:
-            return shape.Rectangle(x * self.size,
-                                   y * self.size,
-                                   self.size,
-                                   self.size)
+            sh = shape.Rectangle(x * self.size,
+                                 y * self.size,
+                                 self.size,
+                                 self.size)
         else:
-            return shape.RightTriangle(x * self.size,
-                                       y * self.size,
-                                       self.size,
-                                       self.size,
-                                       random.randint(0, 3))
+            sh = shape.RightTriangle(x * self.size,
+                                     y * self.size,
+                                     self.size,
+                                     self.size,
+                                     random.randint(0, 3))
+
+        sh.scale(self.scale)
+        return sh
