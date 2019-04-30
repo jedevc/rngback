@@ -8,17 +8,22 @@ class Polygon(Shape):
 
         self.points = points
 
-    def translate(self, dx, dy):
-        for i, (x, y) in enumerate(self.points):
-            self.points[i] = (x + dx, y + dy)
-
-    def scale(self, factor):
+    def center(self):
         center = (0, 0)
         for point in self.points:
             center = (center[0] + point[0],
                       center[1] + point[1])
         center = (center[0] / len(self.points),
                   center[1] / len(self.points))
+
+        return center
+
+    def translate(self, dx, dy):
+        for i, (x, y) in enumerate(self.points):
+            self.points[i] = (x + dx, y + dy)
+
+    def scale(self, factor):
+        center = self.center()
 
         npoints = []
         for point in self.points:

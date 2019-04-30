@@ -23,7 +23,7 @@ class Builder:
         self.width = width or generator.width
         self.height = height or generator.height
 
-        self.colors = color.RandomColor(foreground, background, variation)
+        self.colors = color.GradientColor(foreground, background, variation)
 
     def build(self, seed=None):
         '''
@@ -35,6 +35,8 @@ class Builder:
         Returns:
             The image.
         '''
+
+        self.colors.setup(self.width, self.height)
 
         img = Image.new('RGB',
                         (self.width, self.height),

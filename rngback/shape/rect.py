@@ -8,6 +8,10 @@ class Rectangle(Shape):
         self.width = width
         self.height = height
 
+    def center(self):
+        return (self.x + self.width / 2,
+                self.y + self.height / 2)
+
     def translate(self, dx, dy):
         self.x += dx
         self.y += dy

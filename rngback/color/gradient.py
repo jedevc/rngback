@@ -1,3 +1,4 @@
+import math
 import random
 import colorsys
 from PIL import ImageColor
@@ -5,19 +6,47 @@ from PIL import ImageColor
 from . import util
 
 
-class RandomColor:
+class GradientColor:
     def __init__(self, foreground, background, variation):
         self.fgcolors = util.parse_colors(foreground)
         self.bgcolor = util.parse_color(background)
+
+        self.points = []
 
         try:
             self.hvariation, self.svariation, self.lvariation = variation
         except TypeError:
             self.hvariation = self.svariation = self.lvariation = variation
 
+    def setup(self, width, height):
+        for i in range(len(self.fgcolors)):
+            x = random.randint(0, width)
+            y = random.randint(0, height)
+            self.points.append((x, y))
+
     def foreground(self, shape):
-        red, green, blue = random.choice(self.fgcolors)
-        hue, lit, sat = colorsys.rgb_to_hls(red / 255, green / 255, blue / 255)
+        center = shape.center()
+
+        dists = []
+        for point in self.points:
+            xdiff = center[0] - point[0]
+            ydiff = center[1] - point[1]
+            dist = math.sqrt(xdiff ** 2 + ydiff ** 2)
+            dists.append(dist)
+        total = sum(dists)
+
+        # this is not quite right
+        scales = [dist / total for dist in dists]
+
+        hue = lit = sat = 0
+        for color, scale in zip(self.fgcolors, scales):
+            dh, dl, ds = colorsys.rgb_to_hls(color[0] / 255,
+                                             color[1] / 255,
+                                             color[2] / 255)
+            hue += scale * dh
+            lit += scale * dl
+            sat += scale * ds
+
         return self._vary(hue, sat, lit)
 
     def _vary(self, hue, sat, lit):
